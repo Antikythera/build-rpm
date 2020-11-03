@@ -23,5 +23,5 @@ jobs:
         with:
           spec_file: 'rpm_assets/hello_world.spec'
           variables: |
-            version=1.0.0
+            version=1
             foo=bar
