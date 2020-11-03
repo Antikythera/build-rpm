@@ -1,11 +1,19 @@
-name: 'Your name here'
+name: 'Build RPM'
 description: 'Provide a description here'
-author: 'Your name or organization here'
+author: 'Antikythera - Stefan Mojsilovic'
 inputs:
-  milliseconds: # change this
+  spec_file:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'path to your rpm spec file'
+  variables:
+    required: false
+    description: 'variables to be consumed in the spec file as rpmbuild macros'
+outputs:
+  rpm_package_path:
+    description: 'path to the build RPM package'
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: 'docker'
+  image: 'Dockerfile'
+branding:
+  icon: 'codesandbox'
+  color: 'red'
