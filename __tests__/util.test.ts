@@ -31,14 +31,14 @@ describe('parseInputVariables', () => {
 describe('validateInputSpecFile', () => {
   test('returns a full path of the valid spec file path', () => {
     const pwd = path.resolve()
-    const testRpmSpecFile = './__tests__/test_rpm.spec'
+    const testRpmSpecFile = 'rpm_assets/hello_world.spec'
     const expectedOutput = path.join(pwd, testRpmSpecFile)
     const output = validateInputSpecFile(testRpmSpecFile)
     expect(output).toEqual(expectedOutput)
   })
 
   test("throws if file doesn't exist", () => {
-    const wrongTestRpmSpecFile = './__tests__/phantom.spec'
+    const wrongTestRpmSpecFile = 'rpm_assets/phantom.spec'
     expect(() => validateInputSpecFile(wrongTestRpmSpecFile)).toThrowError()
   })
 })
