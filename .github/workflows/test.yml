@@ -15,14 +15,3 @@ jobs:
           npm install
       - run: |
           npm run all
-  test: # make sure the action works on a clean machine without building
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - run: echo ${{ github.sha }}
-      - uses: 'Antikythera/build-rpm@${{ github.sha }}'
-        with:
-          spec_file: 'rpm_assets/hello_world.spec'
-          variables: |
-            version=1
-            foo=bar
