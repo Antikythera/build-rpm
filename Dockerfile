@@ -1,5 +1,4 @@
-FROM centos/nodejs-12-centos7 as builder
-USER 0
+FROM node:12-alpine as builder
 WORKDIR /app
 COPY ./ /app
 RUN npm install && \
@@ -11,5 +10,5 @@ USER 0
 WORKDIR /app
 RUN yum install -y rpm-build rpmdevtools gcc make coreutils
 COPY --from=builder /app/dist /app/dist
-COPY --from=builder /app/node_modules /app/node_modules
+# COPY --from=builder /app/node_modules /app/node_modules
 ENTRYPOINT ["node", "dist/index.js"]

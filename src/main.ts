@@ -7,20 +7,23 @@ import {
   VariableKeyPair
 } from './util'
 
-const rpmbuildTmp = '/github/home/rpmbuild'
+const rpmbuildTmp = `${process.env.HOME}/rpmbuild`
 const targetRpmbuildTmp = `${rpmbuildTmp}/RPMS/x86_64`
-const outputRpmDir = '/github/workspace/RPMS'
+const outputRpmDir = `${process.env.GITHUB_WORKSPACE}/RPMS`
 
 async function run(): Promise<void> {
   try {
     const specFile: string = validateInputSpecFile(core.getInput('spec_file'))
     const inputVariables = parseInputVariables(core.getInput('variables'))
 
-    core.debug(`Spec file: ${specFile}`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-    core.debug(`Input variables: ${inputVariables}`)
+    core.info(`Spec file: ${specFile}`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+    core.info(`Input variables: ${inputVariables}`)
+    core.info(`User: ${process.env.USER}`)
 
     // Init rpmbuild dir tree
     await exec('rpmdev-setuptree')
+    await exec('pwd')
+    await exec('ls -alF')
 
     // Copy spec file to dir tree
     fs.copyFileSync(specFile, `${rpmbuildTmp}/SPECS/`)
