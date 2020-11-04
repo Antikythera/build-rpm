@@ -19,7 +19,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: "Antikythera/build-rpm@${{ github.ref }}"
+      - run: echo ${{ github.sha }}
+      - uses: 'Antikythera/build-rpm@${{ github.sha }}'
         with:
           spec_file: 'rpm_assets/hello_world.spec'
           variables: |
