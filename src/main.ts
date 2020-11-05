@@ -13,36 +13,37 @@ const outputRpmDir = `${process.env.GITHUB_WORKSPACE}/RPMS`
 
 async function run(): Promise<void> {
   try {
-    const specFile: string = validateInputSpecFile(core.getInput('spec_file'))
+    const inputSpecFile = validateInputSpecFile(core.getInput('spec_file'))
+    const targetSpecFile = `${rpmbuildTmp}/SPECS/${path.basename(
+      inputSpecFile
+    )}`
     const inputVariables = parseInputVariables(core.getInput('variables'))
 
-    core.info(`Spec file: ${specFile}`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+    core.info(`Spec file: ${inputSpecFile}`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
     core.info(`Input variables: ${inputVariables}`)
     core.info(`User: ${process.env.USER}`)
 
     // Init rpmbuild dir tree
     await exec('rpmdev-setuptree')
-    await exec('pwd')
-    await exec('ls -alF')
 
     // Copy spec file to dir tree
-    fs.copyFileSync(specFile, `${rpmbuildTmp}/SPECS/`)
+    fs.copyFileSync(inputSpecFile, targetSpecFile)
 
     // Create the action output RPM dir
     fs.mkdirSync(outputRpmDir, {recursive: true})
 
     // Run rpmbuild and save the rpm file name
     const builtRpmFileName = await runRpmbuildCmd(
-      buildRpmbuildCmd(specFile, inputVariables)
+      buildRpmbuildCmd(targetSpecFile, inputVariables)
     )
 
     // Copy the built RPM to the output dir
     fs.copyFileSync(
       `${targetRpmbuildTmp}/${builtRpmFileName}`,
-      outputRpmFilePath(builtRpmFileName)
+      `${outputRpmDir}/${builtRpmFileName}`
     )
 
-    core.setOutput('rpm_package_path', outputRpmFilePath(builtRpmFileName))
+    core.setOutput('rpm_package_path', `${outputRpmDir}/${builtRpmFileName}`)
   } catch (error) {
     core.setFailed(error.message)
   }
@@ -70,10 +71,6 @@ async function runRpmbuildCmd(cmd: string): Promise<string> {
   } else {
     throw new Error('rpmbuild command failed')
   }
-}
-
-function outputRpmFilePath(fileName: string): string {
-  return `${outputRpmDir}/${fileName}`
 }
 
 run()
