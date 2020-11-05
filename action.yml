@@ -9,8 +9,10 @@ inputs:
     required: false
     description: 'variables to be consumed in the spec file as rpmbuild macros'
 outputs:
+  rpm_package_name:
+    description: 'name of the RPM package'
   rpm_package_path:
-    description: 'path to the build RPM package'
+    description: 'path to the built RPM package'
 runs:
   using: 'docker'
   image: 'Dockerfile'

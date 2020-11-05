@@ -44,6 +44,7 @@ async function run(): Promise<void> {
       `${outputRpmDir}/${builtRpmFileName}`
     )
 
+    core.setOutput('rpm_package_name', `${builtRpmFileName}`)
     core.setOutput('rpm_package_path', `${outputRpmDir}/${builtRpmFileName}`)
   } catch (error) {
     core.setFailed(error.message)
