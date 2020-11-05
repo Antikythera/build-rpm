@@ -3,11 +3,12 @@ import {validateInputSpecFile, parseInputVariables} from '../src/util'
 
 describe('parseInputVariables', () => {
   test('returns an variables array for valid input', () => {
-    const input = 'foo=bar\nversion=1.0.0\n_underscore=10'
+    const input = 'foo=bar\nversion=1.0.0\n_underscore=10\nsuffix_=value'
     const expectedOutput = [
       {name: 'foo', value: 'bar'},
       {name: 'version', value: '1.0.0'},
-      {name: '_underscore', value: '10'}
+      {name: '_underscore', value: '10'},
+      {name: 'suffix_', value: 'value'}
     ]
     const output = parseInputVariables(input)
     expect(output).toEqual(expectedOutput)
