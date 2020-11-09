@@ -8,7 +8,7 @@ export type VariableKeyPair = {
 
 export function parseInputVariables(variables: string): VariableKeyPair[] {
   if (variables !== '') {
-    const lineRegex = /^[a-zA-Z0-9_]+=[a-zA-Z0-9_.\-]+$/m
+    const lineRegex = /^[a-zA-Z0-9_]+=[a-zA-Z0-9_.-]+$/m
     // "foo=bar\nboo=foo" -> ["foo=bar", "boo=foo"] -> [["foo", "bar"], ["boo", "foo"]]
     const validateLine: (l: string) => string = (line: string) => {
       if (!lineRegex.test(line)) {
@@ -31,17 +31,17 @@ export function parseInputVariables(variables: string): VariableKeyPair[] {
 }
 
 export function parseInputSources(sources: string): string[] {
-  const validatePath: (path) => {
-    if (!fs.existsSync(path)) {
-      throw new Error(`Expected a valid path to a file, got ${path} instead`)
+  const validatePath = (filePath: string): string => {
+    if (!fs.existsSync(filePath)) {
+      throw new Error(
+        `Expected a valid path to a file, got ${filePath} instead`
+      )
     }
 
-    return path
+    return filePath
   }
 
-  return sources
-    .split('\n')
-    .map(validatePath)
+  return sources.split('\n').map(validatePath)
 }
 
 export function validateInputSpecFile(specFile: string): string {
@@ -54,5 +54,5 @@ export function validateInputSpecFile(specFile: string): string {
 }
 
 export function copyFileToDir(file: string, targetDir: string): void {
-  fs.copyFileSync(file, `${targetDir}/${fs.basename(file)}`)
+  fs.copyFileSync(file, `${targetDir}/${path.basename(file)}`)
 }

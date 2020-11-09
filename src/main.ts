@@ -54,10 +54,10 @@ async function run(): Promise<void> {
   }
 }
 
-function copyRpmSources(sources: string[]) {
-  sources.array.forEach(source => {
+function copyRpmSources(sources: string[]): void {
+  for (const source of sources) {
     copyFileToDir(source, rpmSourcesTmp)
-  })
+  }
 }
 
 function buildRpmbuildCmd(
