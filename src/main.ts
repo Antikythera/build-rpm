@@ -64,7 +64,7 @@ function buildRpmArgs(
   specFile: string,
   variables: VariableKeyPair[]
 ): string[] {
-  const cmd = ['rpmbuild', '-bb']
+  const cmd = []
 
   for (const varPair of variables) {
     cmd.push('--define', `'${varPair.name} ${varPair.value}'`)
@@ -75,7 +75,8 @@ function buildRpmArgs(
 }
 
 async function runRpmbuild(args: string[]): Promise<string> {
-  if ((await exec('rpmbuild', args)) === 0) {
+  const targetArgs = ['-bb'].concat(args)
+  if ((await exec('rpmbuild', targetArgs)) === 0) {
     const rpmFile = fs.readdirSync(targetRpmBuildTmp)
     if (rpmFile.length === 0) {
       throw new Error(`couldn't find the rpm file at ${targetRpmBuildTmp}`)
