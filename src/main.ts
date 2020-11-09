@@ -37,8 +37,8 @@ async function run(): Promise<void> {
     fs.mkdirSync(outputRpmDir, {recursive: true})
 
     // Run rpmbuild and save the rpm file name
-    const builtRpmFileName = await runRpmbuildCmd(
-      buildRpmbuildCmd(targetSpecFile, inputVariables)
+    const builtRpmFileName = await runRpmbuild(
+      buildRpmArgs(targetSpecFile, inputVariables)
     )
 
     // Copy the built RPM to the output dir
@@ -60,22 +60,22 @@ function copyRpmSources(sources: string[]): void {
   }
 }
 
-function buildRpmbuildCmd(
+function buildRpmArgs(
   specFile: string,
   variables: VariableKeyPair[]
-): string {
-  const rpmVars = variables.reduce(
-    (acc, varPair) =>
-      acc.concat(` --define '${varPair.name} ${varPair.value}'`),
-    ''
-  )
-  const cmd = `rpmbuild -bb${rpmVars} ${specFile}`
-  core.info(cmd)
+): string[] {
+  const cmd = ['rpmbuild', '-bb']
+
+  for (const varPair of variables) {
+    cmd.push('--define', `'${varPair.name} ${varPair.value}'`)
+  }
+  cmd.push(specFile)
+
   return cmd
 }
 
-async function runRpmbuildCmd(cmd: string): Promise<string> {
-  if ((await exec(cmd)) === 0) {
+async function runRpmbuild(args: string[]): Promise<string> {
+  if ((await exec('rpmbuild', args)) === 0) {
     const rpmFile = fs.readdirSync(targetRpmBuildTmp)
     if (rpmFile.length === 0) {
       throw new Error(`couldn't find the rpm file at ${targetRpmBuildTmp}`)
