@@ -2,12 +2,15 @@ name: 'Build RPM'
 description: 'Provide a description here'
 author: 'Antikythera - Stefan Mojsilovic'
 inputs:
+  sources:
+    required: true
+    description: 'list of files to be used as RPM sources, delimited by new lines'
   spec_file:
     required: true
     description: 'path to your rpm spec file'
   variables:
     required: false
-    description: 'variables to be consumed in the spec file as rpmbuild macros'
+    description: 'variables to be consumed in the spec file as rpmbuild macros, delimited by new lines'
 outputs:
   rpm_package_name:
     description: 'name of the RPM package'

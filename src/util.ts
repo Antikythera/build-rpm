@@ -30,6 +30,20 @@ export function parseInputVariables(variables: string): VariableKeyPair[] {
   return []
 }
 
+export function parseInputSources(sources: string): string[] {
+  const validatePath: (path) => {
+    if (!fs.existsSync(path)) {
+      throw new Error(`Expected a valid path to a file, got ${path} instead`)
+    }
+
+    return path
+  }
+
+  return sources
+    .split('\n')
+    .map(validatePath)
+}
+
 export function validateInputSpecFile(specFile: string): string {
   const fullPath = path.resolve(specFile)
   if (fs.existsSync(fullPath)) {
@@ -37,4 +51,8 @@ export function validateInputSpecFile(specFile: string): string {
   } else {
     throw new Error(`RPM Spec file doesn't exist in: ${fullPath}`)
   }
+}
+
+export function copyFileToDir(file: string, targetDir: string): void {
+  fs.copyFileSync(file, `${targetDir}/${fs.basename(file)}`)
 }
