@@ -69,7 +69,9 @@ function buildRpmbuildCmd(
       acc.concat(` --define '${varPair.name} ${varPair.value}'`),
     ''
   )
-  return `rpmbuild -bb${rpmVars} ${specFile}`
+  const cmd = `rpmbuild -bb${rpmVars} ${specFile}`
+  core.info(cmd)
+  return cmd
 }
 
 async function runRpmbuildCmd(cmd: string): Promise<string> {
