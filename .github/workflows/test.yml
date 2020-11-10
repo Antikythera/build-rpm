@@ -26,7 +26,7 @@ jobs:
         with:
           push: true
           tags: |
-            Antikythera/build-rpm:latest
+            antikythera/build-rpm:latest
 
   test:
     runs-on: ubuntu-latest
