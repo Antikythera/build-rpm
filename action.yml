@@ -18,7 +18,7 @@ outputs:
     description: 'path to the built RPM package'
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/antikythera/build-rpm:latest'
+  image: 'docker://ghcr.io/antikythera/build-rpm:v1'
 branding:
   icon: 'codesandbox'
   color: 'red'

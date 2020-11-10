@@ -25,4 +25,5 @@ jobs:
           push: true
           tags: |
             ghcr.io/antikythera/build-rpm:latest
+            ghcr.io/antikythera/build-rpm:v1
             ghcr.io/antikythera/build-rpm:${{ steps.get_release.outputs.tag_name }}
