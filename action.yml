@@ -1,4 +1,4 @@
-name: 'Build RPM'
+name: 'Build RPM centos7'
 description: 'Provide a description here'
 author: 'Antikythera - Stefan Mojsilovic'
 inputs:
@@ -20,5 +20,5 @@ runs:
   using: 'docker'
   image: 'docker://ghcr.io/antikythera/build-rpm:v1'
 branding:
-  icon: 'codesandbox'
+  icon: 'package'
   color: 'red'
