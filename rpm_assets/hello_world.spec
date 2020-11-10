@@ -1,20 +1,19 @@
 Name:       hello-world
-Version:    %{version}
-Release:    1
-Summary:    Most simple RPM package
-License:    FIXME
+Version:    %{_version}
+Release:    1%{?dist}
+Summary:    Simplest RPM package
+License:    MIT
 
 %description
-This is my first RPM package, which does nothing.
+This is a test RPM package, which does nothing.
 
 %prep
-# we have no source, so nothing here
 
 %build
 cat > hello-world.sh <<EOF
 #!/usr/bin/bash
-echo foo %{foo}
 echo Hello world
+echo foo %{_foo}
 EOF
 
 %install
