@@ -67,7 +67,7 @@ function buildRpmArgs(
   const cmd = []
 
   for (const varPair of variables) {
-    cmd.push('-D', `"${varPair.name} ${varPair.value}"`)
+    cmd.push('-D', `${varPair.name} ${varPair.value}`)
   }
   cmd.push(specFile)
 
