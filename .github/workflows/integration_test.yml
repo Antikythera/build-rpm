@@ -1,17 +1,11 @@
-name: Integration test
-on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version of the RPM builder to test'
-        required: true
-        default: 'latest'
+name: Integration test latest
+on: [workflow_dispatch]
 
 jobs:
   integration_test:
     runs-on: ubuntu-latest
     steps:
-      - uses: Antikythera/build-rpm@${{ github.event.inputs.version }}
+      - uses: Antikythera/build-rpm@latest
         id: build_rpm
         with:
           spec_file: rpm_assets/hello_world.spec
