@@ -11,7 +11,7 @@ jobs:
         with:
           spec_file: rpm_assets/hello_world.spec
           sources: |
-            rpm_assets/hello.tar.gz
+            rpm_assets/hello-world.tar.gz
           variables: |
             _version=1.0.1
             _foo=bar
