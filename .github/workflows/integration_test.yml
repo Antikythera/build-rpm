@@ -17,4 +17,6 @@ jobs:
             _foo=bar
 
       - name: build_rpm outputs
-        run: echo ${{ steps.build_rpm.outputs }}
+        run: |
+          echo rpm_package_name: ${{ steps.build_rpm.outputs.rpm_package_name }}
+          echo rpm_package_path: ${{ steps.build_rpm.outputs.rpm_package_path }}
