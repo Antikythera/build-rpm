@@ -2,8 +2,11 @@ Name:       hello-world
 Version:    %{_version}
 Release:    1%{?dist}
 Summary:    Simplest RPM package
+
 License:    MIT
 Source0:    hello-world-%{_version}.tar.gz
+
+BuildArch:  noarch
 
 %description
 This is a test RPM package, which does nothing.
