@@ -9,6 +9,7 @@ Source0:    hello.tar.gz
 This is a test RPM package, which does nothing.
 
 %prep
+%setup -q 
 
 %build
 cat > hello-world.sh <<EOF
@@ -20,6 +21,7 @@ EOF
 %install
 mkdir -p %{buildroot}/usr/bin/
 install -m 755 hello-world.sh %{buildroot}/usr/bin/hello-world.sh
+install -m 755 hello.sh %{buildroot}/usr/bin/hello.sh
 
 %files
 /usr/bin/hello-world.sh
