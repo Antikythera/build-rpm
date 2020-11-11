@@ -3,6 +3,7 @@ Version:    %{_version}
 Release:    1%{?dist}
 Summary:    Simplest RPM package
 License:    MIT
+Source0:    hello.tar.gz
 
 %description
 This is a test RPM package, which does nothing.
