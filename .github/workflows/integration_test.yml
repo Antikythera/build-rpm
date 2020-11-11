@@ -1,0 +1,25 @@
+name: Integration test
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version of the RPM builder to test'
+        required: true
+        default: 'latest'
+
+jobs:
+  integration_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Antikythera/build-rpm@${{ github.event.inputs.version }}
+        id: build_rpm
+        with:
+          spec_file: rpm_assets/hello_world.spec
+          sources: |
+            rpm_assets/hello.tar.gz
+          variables: |
+            _version=1.0.1
+            _foo=bar
+
+      - name: build_rpm outputs
+        run: echo ${{ steps.build_rpm.outputs }}
