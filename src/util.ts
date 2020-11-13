@@ -10,7 +10,7 @@ export function parseInputVariables(variables: string): VariableKeyPair[] {
   if (variables !== '') {
     const lineRegex = /^[a-zA-Z0-9_]+=[a-zA-Z0-9_.-]+$/m
     // "foo=bar\nboo=foo" -> ["foo=bar", "boo=foo"] -> [["foo", "bar"], ["boo", "foo"]]
-    const validateLine: (l: string) => string = (line: string) => {
+    const validateLine = (line: string): string => {
       if (!lineRegex.test(line)) {
         throw new Error(
           `Expected the line input to be in "<name>=<value>" form, got ${line} instead`
