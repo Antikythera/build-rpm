@@ -60,7 +60,7 @@ async function run(): Promise<void> {
     core.debug('Done')
 
     core.setOutput('rpm_package_name', path.basename(builtRpmFilePath))
-    core.setOutput('rpm_package_path', `${outputRpmDir}/${builtRpmFileName}`)
+    core.setOutput('rpm_package_path', `RPMS/${builtRpmFileName}`)
   } catch (error) {
     core.setFailed(error.message)
   }
