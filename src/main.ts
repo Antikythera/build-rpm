@@ -29,23 +29,35 @@ async function run(): Promise<void> {
     await exec('rpmdev-setuptree')
 
     // Copy spec file to dir tree
+    core.debug(`Copying spec file ${inputSpecFile} to ${targetSpecFile}...`)
     fs.copyFileSync(inputSpecFile, targetSpecFile)
+    core.debug('Done')
 
     // Copy sources to dir tree
+    core.debug(`Copying source files...`)
     copyRpmSources(inputSources)
+    core.debug('Done')
 
     // Create the action output RPM dir
+    core.debug(`Creating the output dir: ${outputRpmDir}`)
     fs.mkdirSync(outputRpmDir, {recursive: true})
+    core.debug('Done')
 
     // Run rpmbuild and save the rpm file name
+    core.debug('Running rpmbuild...')
     const builtRpmFilePath = await runRpmbuild(
       buildRpmArgs(targetSpecFile, inputVariables)
     )
+    core.debug(`Done, result: ${builtRpmFilePath}`)
 
     const builtRpmFileName = path.basename(builtRpmFilePath)
 
     // Copy the built RPM to the output dir
+    core.debug(
+      `Copying RPM ${builtRpmFilePath} to output dir ${outputRpmDir} ...`
+    )
     copyFileToDir(builtRpmFilePath, outputRpmDir)
+    core.debug('Done')
 
     core.setOutput('rpm_package_name', path.basename(builtRpmFilePath))
     core.setOutput('rpm_package_path', `${outputRpmDir}/${builtRpmFileName}`)
