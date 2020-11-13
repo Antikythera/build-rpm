@@ -56,3 +56,23 @@ export function validateInputSpecFile(specFile: string): string {
 export function copyFileToDir(file: string, targetDir: string): void {
   fs.copyFileSync(file, `${targetDir}/${path.basename(file)}`)
 }
+
+export function findFileByExt(
+  base: string,
+  ext: string,
+  files = fs.readdirSync(base),
+  result: string[] = []
+): string[] {
+  for (const file of files) {
+    const newbase = path.join(base, file)
+    if (fs.statSync(newbase).isDirectory()) {
+      result = findFileByExt(newbase, ext, fs.readdirSync(newbase), result)
+    } else {
+      if (file.substr(-1 * (ext.length + 1)) === `.${ext}`) {
+        result.push(newbase)
+      }
+    }
+  }
+
+  return result
+}

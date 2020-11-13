@@ -6,13 +6,14 @@ import {
   copyFileToDir,
   parseInputVariables,
   parseInputSources,
+  findFileByExt,
   validateInputSpecFile,
   VariableKeyPair
 } from './util'
 
 const rpmBuildTmp = `${process.env.HOME}/rpmbuild`
 const rpmSourcesTmp = `${rpmBuildTmp}/SOURCES`
-const targetRpmBuildTmp = `${rpmBuildTmp}/RPMS/x86_64`
+const targetRpmBuildTmp = `${rpmBuildTmp}/RPMS`
 const outputRpmDir = `${process.env.GITHUB_WORKSPACE}/RPMS`
 
 async function run(): Promise<void> {
@@ -37,17 +38,16 @@ async function run(): Promise<void> {
     fs.mkdirSync(outputRpmDir, {recursive: true})
 
     // Run rpmbuild and save the rpm file name
-    const builtRpmFileName = await runRpmbuild(
+    const builtRpmFilePath = await runRpmbuild(
       buildRpmArgs(targetSpecFile, inputVariables)
     )
 
-    // Copy the built RPM to the output dir
-    fs.copyFileSync(
-      `${targetRpmBuildTmp}/${builtRpmFileName}`,
-      `${outputRpmDir}/${builtRpmFileName}`
-    )
+    const builtRpmFileName = path.basename(builtRpmFilePath)
 
-    core.setOutput('rpm_package_name', `${builtRpmFileName}`)
+    // Copy the built RPM to the output dir
+    copyFileToDir(builtRpmFilePath, outputRpmDir)
+
+    core.setOutput('rpm_package_name', path.basename(builtRpmFilePath))
     core.setOutput('rpm_package_path', `${outputRpmDir}/${builtRpmFileName}`)
   } catch (error) {
     core.setFailed(error.message)
@@ -77,11 +77,11 @@ function buildRpmArgs(
 async function runRpmbuild(args: string[]): Promise<string> {
   const targetArgs = ['-bb'].concat(args)
   if ((await exec('rpmbuild', targetArgs)) === 0) {
-    const rpmFile = fs.readdirSync(targetRpmBuildTmp)
-    if (rpmFile.length === 0) {
-      throw new Error(`couldn't find the rpm file at ${targetRpmBuildTmp}`)
+    const rpmFiles = findFileByExt(targetRpmBuildTmp, 'rpm')
+    if (rpmFiles.length === 0) {
+      throw new Error(`couldn't find the rpm file in ${targetRpmBuildTmp}`)
     }
-    return rpmFile[0]
+    return path.resolve(rpmFiles[0])
   } else {
     throw new Error('rpmbuild command failed')
   }
