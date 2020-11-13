@@ -29,35 +29,35 @@ async function run(): Promise<void> {
     await exec('rpmdev-setuptree')
 
     // Copy spec file to dir tree
-    core.debug(`Copying spec file ${inputSpecFile} to ${targetSpecFile}...`)
+    core.info(`Copying spec file ${inputSpecFile} to ${targetSpecFile}...`)
     fs.copyFileSync(inputSpecFile, targetSpecFile)
-    core.debug('Done')
+    core.info('Done')
 
     // Copy sources to dir tree
-    core.debug(`Copying source files...`)
+    core.info(`Copying source files...`)
     copyRpmSources(inputSources)
-    core.debug('Done')
+    core.info('Done')
 
     // Create the action output RPM dir
-    core.debug(`Creating the output dir: ${outputRpmDir}`)
+    core.info(`Creating the output dir: ${outputRpmDir}`)
     fs.mkdirSync(outputRpmDir, {recursive: true})
-    core.debug('Done')
+    core.info('Done')
 
     // Run rpmbuild and save the rpm file name
-    core.debug('Running rpmbuild...')
+    core.info('Running rpmbuild...')
     const builtRpmFilePath = await runRpmbuild(
       buildRpmArgs(targetSpecFile, inputVariables)
     )
-    core.debug(`Done, result: ${builtRpmFilePath}`)
+    core.info(`Done, result: ${builtRpmFilePath}`)
 
     const builtRpmFileName = path.basename(builtRpmFilePath)
 
     // Copy the built RPM to the output dir
-    core.debug(
+    core.info(
       `Copying RPM ${builtRpmFilePath} to output dir ${outputRpmDir} ...`
     )
     copyFileToDir(builtRpmFilePath, outputRpmDir)
-    core.debug('Done')
+    core.info('Done')
 
     core.setOutput('rpm_package_name', path.basename(builtRpmFilePath))
     core.setOutput('rpm_package_path', `${outputRpmDir}/${builtRpmFileName}`)
