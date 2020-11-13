@@ -1,5 +1,5 @@
-name: 'Build RPM'
-description: 'Provide a description here'
+name: 'Build RPM Centos7'
+description: 'Build RPM package for on Cenots7. Supports RPM macros with _define_. '
 author: 'Antikythera - Stefan Mojsilovic'
 inputs:
   sources:
@@ -18,7 +18,7 @@ outputs:
     description: 'path to the built RPM package'
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'docker://ghcr.io/antikythera/build-rpm:v1'
 branding:
-  icon: 'codesandbox'
+  icon: 'package'
   color: 'red'

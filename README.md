@@ -1,103 +1,67 @@
-<p align="center">
-  <a href="https://github.com/actions/typescript-action/actions"><img alt="typescript-action status" src="https://github.com/actions/typescript-action/workflows/build-test/badge.svg"></a>
+# build-rpm
+
+<a href="https://github.com/Antikythera/build-rpm/actions"><img alt="build-rpm status" src="https://github.com/Antikythera/build-rpm/workflows/test/badge.svg"></a>
+
 </p>
 
-# Create a JavaScript Action using TypeScript
+This action builds a RPM package for Centos7.
 
-Use this template to bootstrap the creation of a TypeScript action.:rocket:
+## Input options
 
-This template includes compilation support, tests, a validation workflow, publishing, and versioning guidance.  
+- `spec_file` : **required** Path to your _RPM spec_ file
+- `sources` : New line delimited files list that will be copied to the `SOURCES` rpmbuild directory. These files are available from the spec file.
+- `variables` : New line delimited `key=value` pairs. This get's propaged to the _rpmbuild_ command as a `--define` parameter. You can then use this as a macro inside the _spec_ file.
 
-If you are new, there's also a simpler introduction.  See the [Hello World JavaScript Action](https://github.com/actions/hello-world-javascript-action)
+## Outputs
 
-## Create an action from this template
+- `rpm_package_path` : Path to the built RPM file
+- `rpm_package_name` : Name of the built RPM file
 
-Click the `Use this Template` and provide the new repo details for your action
+## Usage
 
-## Code in Main
+Basic:
 
-Install the dependencies  
-```bash
-$ npm install
+```yml
+- steps:
+    - uses: Antikythera/build-rpm@v1
+      id: build_rpm
+      with:
+        spec_file: my_app.spec
+        sources: |
+          path/to/source.tar.gz
+
+    - name: Upload RPM
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: my_app.rpm
+          asset_path: ${{ steps.build_rpm.outputs.rpm_package_path }}
+          asset_name: ${{ steps.build_rpm.outputs.rpm_package_name }}
+          asset_content_type: application/octet-stream
 ```
 
-Build the typescript and package it for distribution
-```bash
-$ npm run build && npm run package
+With variables:
+
+```yml
+- steps:
+    - uses: Antikythera/build-rpm@v1
+      id: build_rpm
+      with:
+        spec_file: my_app.spec
+        sources: |
+          path/to/source.tar.gz
+        variables: |
+          _version=1.0.0
+          _foo=bar
+
+    - name: Upload RPM
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: my_app.rpm
+          asset_path: ${{ steps.build_rpm.outputs.rpm_package_path }}
+          asset_name: ${{ steps.build_rpm.outputs.rpm_package_name }}
+          asset_content_type: application/octet-stream
 ```
-
-Run the tests :heavy_check_mark:  
-```bash
-$ npm test
-
- PASS  ./index.test.js
-  ✓ throws invalid number (3ms)
-  ✓ wait 500 ms (504ms)
-  ✓ test runs (95ms)
-
-...
-```
-
-## Change action.yml
-
-The action.yml contains defines the inputs and output for your action.
-
-Update the action.yml with your name, description, inputs and outputs for your action.
-
-See the [documentation](https://help.github.com/en/articles/metadata-syntax-for-github-actions)
-
-## Change the Code
-
-Most toolkit and CI/CD operations involve async operations so the action is run in an async function.
-
-```javascript
-import * as core from '@actions/core';
-...
-
-async function run() {
-  try { 
-      ...
-  } 
-  catch (error) {
-    core.setFailed(error.message);
-  }
-}
-
-run()
-```
-
-See the [toolkit documentation](https://github.com/actions/toolkit/blob/master/README.md#packages) for the various packages.
-
-## Publish to a distribution branch
-
-Actions are run from GitHub repos so we will checkin the packed dist folder. 
-
-Then run [ncc](https://github.com/zeit/ncc) and push the results:
-```bash
-$ npm run package
-$ git add dist
-$ git commit -a -m "prod dependencies"
-$ git push origin releases/v1
-```
-
-Note: We recommend using the `--license` option for ncc, which will create a license file for all of the production node modules used in your project.
-
-Your action is now published! :rocket: 
-
-See the [versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-
-## Validate
-
-You can now validate the action by referencing `./` in a workflow in your repo (see [test.yml](.github/workflows/test.yml))
-
-```yaml
-uses: ./
-with:
-  milliseconds: 1000
-```
-
-See the [actions tab](https://github.com/actions/typescript-action/actions) for runs of this action! :rocket:
-
-## Usage:
-
-After testing you can [create a v1 tag](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md) to reference the stable and latest V1 action

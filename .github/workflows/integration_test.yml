@@ -1,0 +1,22 @@
+name: Integration test latest
+on: [workflow_dispatch]
+
+jobs:
+  integration_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: Antikythera/build-rpm@latest
+        id: build_rpm
+        with:
+          spec_file: rpm_assets/hello_world.spec
+          sources: |
+            rpm_assets/hello-world-1.0.1.tar.gz
+          variables: |
+            _version=1.0.1
+            _foo=bar
+
+      - name: build_rpm outputs
+        run: |
+          echo rpm_package_name: ${{ steps.build_rpm.outputs.rpm_package_name }}
+          echo rpm_package_path: ${{ steps.build_rpm.outputs.rpm_package_path }}
