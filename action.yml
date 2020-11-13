@@ -1,5 +1,5 @@
-name: 'Build RPM centos7'
-description: 'Provide a description here'
+name: 'Build RPM Centos7'
+description: 'Build RPM package for on Cenots7. Supports RPM macros with _define_. '
 author: 'Antikythera - Stefan Mojsilovic'
 inputs:
   sources:
