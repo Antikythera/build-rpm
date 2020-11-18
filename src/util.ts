@@ -8,7 +8,7 @@ export type VariableKeyPair = {
 
 export function parseInputVariables(variables: string): VariableKeyPair[] {
   if (variables !== '') {
-    const lineRegex = /^[a-zA-Z0-9_]+=[a-zA-Z0-9_.-]+$/m
+    const lineRegex = /^[a-zA-Z0-9_]+=[~a-zA-Z0-9_.-]+$/m
     // "foo=bar\nboo=foo" -> ["foo=bar", "boo=foo"] -> [["foo", "bar"], ["boo", "foo"]]
     const validateLine = (line: string): string => {
       if (!lineRegex.test(line)) {
