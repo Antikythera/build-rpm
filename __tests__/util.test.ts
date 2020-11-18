@@ -16,6 +16,14 @@ describe('parseInputVariables', () => {
     expect(output).toEqual(expectedOutput)
   })
 
+  test('accepts tilde in variables input', () => {
+    const input = '_version=1.0.1~rc1'
+    const expectedOutput = [{name: '_version', value: '1.0.1~rc1'}]
+
+    const output = parseInputVariables(input)
+    expect(output).toEqual(expectedOutput)
+  })
+
   test('throws an error on invalid input - no equal sign', () => {
     const input = 'foo=bar\nleftright'
     expect(() => parseInputVariables(input)).toThrowError()
